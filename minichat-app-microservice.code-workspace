@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": "user-service"
+		},
+		{
+			"path": "message-service"
+		},
+		{
+			"path": "app-service"
+		}
+	],
+	"settings": {}
+}
