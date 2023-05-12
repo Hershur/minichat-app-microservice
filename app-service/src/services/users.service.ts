@@ -4,6 +4,9 @@ import { SignUpRequest } from '../dtos/singup-request.dto';
 import { SignUpEvent } from '../events/signup.event';
 import { firstValueFrom } from 'rxjs';
 import * as bcrypt from 'bcrypt';
+import { SignInRequest } from 'src/dtos/signin-request.dto';
+import { SignInEvent } from 'src/events/signin-event';
+import { Request, Response } from 'express';
 
 @Injectable()
 export class UsersService {
@@ -32,12 +35,45 @@ export class UsersService {
       };
     } catch (error) {
       throw new HttpException(
-        {
-          statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
-          message: error.message || 'An unknown error occurred',
-          error,
-        },
-        HttpStatus.INTERNAL_SERVER_ERROR,
+        error,
+        error.statusCode || HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
+  async signIn(
+    signInRequest: SignInRequest,
+    request: Request,
+    response: Response,
+  ) {
+    try {
+      const result = await firstValueFrom(
+        this.userServiceClient.send(
+          'user:signin',
+          new SignInEvent(signInRequest.email, signInRequest.password),
+        ),
+      );
+
+      const { accessToken, ...data } = result;
+
+      if (!accessToken) {
+        throw new HttpException('Invalid request', HttpStatus.FORBIDDEN);
+      }
+
+      response.cookie('accessToken', accessToken, {
+        httpOnly: true,
+        expires: new Date(new Date().getTime() + 180 * 1000), //expires in 3 minutes
+      });
+
+      return response.send({
+        success: true,
+        message: 'User signed in successfully',
+        data,
+      });
+    } catch (error) {
+      throw new HttpException(
+        error,
+        error.statusCode || HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
   }

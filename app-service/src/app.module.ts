@@ -4,6 +4,9 @@ import { AppService } from './app.service';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { UsersService } from './services/users.service';
 import { UsersController } from './users.controller';
+import { PassportModule } from '@nestjs/passport';
+import { JwtStrategy } from './jwt.strategy';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
@@ -13,8 +16,10 @@ import { UsersController } from './users.controller';
         transport: Transport.TCP,
       },
     ]),
+    PassportModule,
+    ConfigModule.forRoot(),
   ],
   controllers: [AppController, UsersController],
-  providers: [AppService, UsersService],
+  providers: [AppService, UsersService, JwtStrategy],
 })
 export class AppModule {}
