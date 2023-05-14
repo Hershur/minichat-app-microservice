@@ -6,7 +6,6 @@ import { firstValueFrom } from 'rxjs';
 import * as bcrypt from 'bcrypt';
 import { SignInRequest } from 'src/dtos/signin-request.dto';
 import { SignInEvent } from 'src/events/signin-event';
-import { Request, Response } from 'express';
 
 @Injectable()
 export class UsersService {
@@ -41,11 +40,7 @@ export class UsersService {
     }
   }
 
-  async signIn(
-    signInRequest: SignInRequest,
-    request: Request,
-    response: Response,
-  ) {
+  async signIn(signInRequest: SignInRequest) {
     try {
       const result = await firstValueFrom(
         this.userServiceClient.send(
@@ -54,22 +49,15 @@ export class UsersService {
         ),
       );
 
-      const { accessToken, ...data } = result;
-
-      if (!accessToken) {
+      if (!result.accessToken) {
         throw new HttpException('Invalid request', HttpStatus.FORBIDDEN);
       }
 
-      response.cookie('accessToken', accessToken, {
-        httpOnly: true,
-        expires: new Date(new Date().getTime() + 180 * 1000), //expires in 3 minutes
-      });
-
-      return response.send({
+      return {
         success: true,
         message: 'User signed in successfully',
-        data,
-      });
+        result,
+      };
     } catch (error) {
       throw new HttpException(
         error,

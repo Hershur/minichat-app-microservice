@@ -5,8 +5,10 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
 import { UsersService } from './services/users.service';
 import { UsersController } from './users.controller';
 import { PassportModule } from '@nestjs/passport';
-import { JwtStrategy } from './jwt.strategy';
 import { ConfigModule } from '@nestjs/config';
+import { MessagesGateway } from './messages.gateway';
+import { MessageService } from './services/message.service';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   imports: [
@@ -15,11 +17,22 @@ import { ConfigModule } from '@nestjs/config';
         name: 'USER:SERVICE',
         transport: Transport.TCP,
       },
+      {
+        name: 'MESSAGE:SERVICE',
+        transport: Transport.TCP,
+        options: {
+          port: 3001,
+        },
+      },
     ]),
+    JwtModule.register({
+      global: true,
+      secret: process.env.JWT_SECRET,
+    }),
     PassportModule,
     ConfigModule.forRoot(),
   ],
   controllers: [AppController, UsersController],
-  providers: [AppService, UsersService, JwtStrategy],
+  providers: [AppService, UsersService, MessagesGateway, MessageService],
 })
 export class AppModule {}

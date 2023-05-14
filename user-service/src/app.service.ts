@@ -50,7 +50,10 @@ export class AppService {
 
     return {
       ...userData,
-      accessToken: this.jwtService.sign(userData, { secret: JWTSecret }),
+      accessToken: this.jwtService.sign(userData, {
+        secret: JWTSecret,
+        expiresIn: 5 * 60,
+      }),
     };
   }
 }
