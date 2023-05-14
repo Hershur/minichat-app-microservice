@@ -24,7 +24,7 @@ services:
       context: ./user-service
       dockerfile: Dockerfile
     ports:
-      - '4000:4000'
+      - '4001:4001'
     environment:
       JWT_SECRET: 'DEb2tOddZ83FF+vguMJFgY9L5dttSiuYXXSx4N639wl/kpuxk8uvjw=='
       DATABASE_URL: 'postgres://cqlxdhqq:lu-eS2BPy__JgixNIZbZ3Njnj3lsUtck@rogue.db.elephantsql.com:5432/cqlxdhqq'
@@ -36,4 +36,4 @@ services:
       context: ./message-service
       dockerfile: Dockerfile
     ports:
-      - '4001:4000'
+      - '4002:4002'
