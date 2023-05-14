@@ -1,0 +1,39 @@
+version: '3.9'
+
+services:
+  appservice:
+    container_name: appservice
+    image: minichatapp/appservice:1.0.0
+    build: 
+      context: ./app-service
+      dockerfile: Dockerfile
+    ports:
+      - "8080:80"
+    environment:
+      JWT_SECRET: "DEb2tOddZ83FF+vguMJFgY9L5dttSiuYXXSx4N639wl/kpuxk8uvjw=="
+    depends_on:
+      userservice:
+        condition: service_healthy
+      messageservice:
+        condition: service_healthy
+
+  userservice:
+    container_name: userservice
+    image: minichatapp/userservice:1.0.0
+    build: 
+      context: ./user-service
+      dockerfile: Dockerfile
+    ports:
+      - "8080:80"
+    environment:
+      JWT_SECRET: "DEb2tOddZ83FF+vguMJFgY9L5dttSiuYXXSx4N639wl/kpuxk8uvjw=="
+      DATABASE_URL: "postgres://cqlxdhqq:lu-eS2BPy__JgixNIZbZ3Njnj3lsUtck@rogue.db.elephantsql.com:5432/cqlxdhqq"
+  
+  messageservice:
+    container_name: messageservice
+    image: minichatapp/messageservice:1.0.0
+    build: 
+      context: ./message-service
+      dockerfile: Dockerfile
+    ports:
+      - "8081:80"
