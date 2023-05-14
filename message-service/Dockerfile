@@ -1,28 +1,23 @@
-FROM node:alpine AS development
+# Use Node.js 14 as the base image
+FROM node:16.3.0-alpine
 
+# Create the working directory and set it as the working directory
 WORKDIR /usr/src/app
 
+# Copy the package.json and package-lock.json files to the working directory
 COPY package*.json ./
 
+# Install the dependencies
 RUN npm install
 
-COPY . . 
-
-RUN npm run build
-
-FROM node:alpine as production
-
-ARG NODE_ENV=production
-ENV NODE_ENV=${NODE_ENV}
-
-WORKDIR /usr/src/app
-
-COPY package*.json ./
-
-RUN npm install --only=prod
-
+# Copy the rest of the application code to the working directory
 COPY . .
 
-COPY --from=development /usr/src/app/dist ./dist
+# Build the application
+RUN npm run build
 
-CMD ["node", "dist/main"]
+# Expose the port that the microservice will listen on
+EXPOSE 4001
+
+# Start the application
+CMD ["npm", "run", "start:prod"]

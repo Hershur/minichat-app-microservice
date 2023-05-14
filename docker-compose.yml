@@ -8,9 +8,9 @@ services:
       context: ./app-service
       dockerfile: Dockerfile
     ports:
-      - "8080:80"
+      - '4000:4000'
     environment:
-      JWT_SECRET: "DEb2tOddZ83FF+vguMJFgY9L5dttSiuYXXSx4N639wl/kpuxk8uvjw=="
+      JWT_SECRET: 'DEb2tOddZ83FF+vguMJFgY9L5dttSiuYXXSx4N639wl/kpuxk8uvjw=='
     depends_on:
       userservice:
         condition: service_healthy
@@ -24,10 +24,10 @@ services:
       context: ./user-service
       dockerfile: Dockerfile
     ports:
-      - "8080:80"
+      - '4000:4000'
     environment:
-      JWT_SECRET: "DEb2tOddZ83FF+vguMJFgY9L5dttSiuYXXSx4N639wl/kpuxk8uvjw=="
-      DATABASE_URL: "postgres://cqlxdhqq:lu-eS2BPy__JgixNIZbZ3Njnj3lsUtck@rogue.db.elephantsql.com:5432/cqlxdhqq"
+      JWT_SECRET: 'DEb2tOddZ83FF+vguMJFgY9L5dttSiuYXXSx4N639wl/kpuxk8uvjw=='
+      DATABASE_URL: 'postgres://cqlxdhqq:lu-eS2BPy__JgixNIZbZ3Njnj3lsUtck@rogue.db.elephantsql.com:5432/cqlxdhqq'
   
   messageservice:
     container_name: messageservice
@@ -36,4 +36,4 @@ services:
       context: ./message-service
       dockerfile: Dockerfile
     ports:
-      - "8081:80"
+      - '4001:4000'
