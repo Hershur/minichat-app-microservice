@@ -9,9 +9,16 @@ export class AppService {
 
   handleSendMessage(data: MessageEvent) {
     const user = data.users.find((user) => user.id === data.receiverUserId);
-    return {
-      message: data.messageBody,
-      receiverSocketId: user.socketId,
-    };
+
+    if (user) {
+      return {
+        message: data.messageBody,
+        receiverSocketId: user.socketId,
+      };
+    } else {
+      return {
+        message: 'User is not connected',
+      };
+    }
   }
 }

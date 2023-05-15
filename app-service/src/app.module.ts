@@ -16,6 +16,9 @@ import { JwtModule } from '@nestjs/jwt';
       {
         name: 'USER:SERVICE',
         transport: Transport.TCP,
+        options: {
+          port: 3002,
+        },
       },
       {
         name: 'MESSAGE:SERVICE',

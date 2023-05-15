@@ -45,14 +45,20 @@ export class MessageService {
         body: result.message,
       };
 
-      const isMessageSent = socket
-        .to(result.receiverSocketId)
-        .emit('message', message);
-
-      if (isMessageSent) {
+      if (result.receiverSocketId) {
+        const isMessageSent = socket
+          .to(result.receiverSocketId)
+          .emit('message', message);
+        if (isMessageSent) {
+          return {
+            event: 'message',
+            data: `Message ${messageId}, sent`,
+          };
+        }
+      } else {
         return {
           event: 'message',
-          data: `Message ${messageId}, sent`,
+          data: result.message,
         };
       }
     } catch (error) {

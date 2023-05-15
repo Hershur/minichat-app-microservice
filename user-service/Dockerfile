@@ -7,6 +7,8 @@ WORKDIR /usr/src/app
 # Copy the package.json and package-lock.json files to the working directory
 COPY package.json ./
 
+COPY ./prisma prisma
+
 # Install the dependencies
 RUN npm install
 
@@ -17,7 +19,7 @@ COPY . .
 RUN npm run build
 
 # Expose the port that the microservice will listen on
-EXPOSE 4000
+EXPOSE 3002
 
 # Start the application
-CMD ["npm", "run", "start:prod"]
+CMD ["node", "dist/src/main"]

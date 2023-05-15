@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { SignUpEvent } from './events/signup.event';
 import { PrismaService } from 'prisma/prisma.service';
 import { SignInEvent } from './events/signin-event';
@@ -22,7 +22,7 @@ export class AppService {
     });
 
     if (findUser) {
-      throw new BadRequestException('User already exists');
+      throw new HttpException('User already exists', HttpStatus.BAD_REQUEST);
     }
 
     const { id, email, name } = await this.prisma.user.create({ data });
@@ -38,14 +38,20 @@ export class AppService {
     });
 
     if (!findUser) {
-      throw new BadRequestException('Invalid credentials supplied');
+      throw new HttpException(
+        'Invalid credentials supplied',
+        HttpStatus.UNAUTHORIZED,
+      );
     }
 
     const { password: userPassword, ...userData } = findUser;
     const isPasswordMatch = await bcrypt.compare(password, userPassword);
 
     if (!isPasswordMatch) {
-      throw new BadRequestException('Invalid credentials supplied');
+      throw new HttpException(
+        'Invalid credentials supplied',
+        HttpStatus.UNAUTHORIZED,
+      );
     }
 
     return {

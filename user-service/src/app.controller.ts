@@ -1,9 +1,11 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, UseFilters } from '@nestjs/common';
 import { AppService } from './app.service';
 import { EventPattern } from '@nestjs/microservices';
 import { SignUpEvent } from './events/signup.event';
 import { SignInEvent } from './events/signin-event';
+import { ExceptionFilter } from './exceptions/exception-filter';
 
+@UseFilters(new ExceptionFilter())
 @Controller()
 export class AppController {
   constructor(private readonly appService: AppService) {}

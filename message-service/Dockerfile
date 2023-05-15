@@ -17,7 +17,7 @@ COPY . .
 RUN npm run build
 
 # Expose the port that the microservice will listen on
-EXPOSE 4001
+EXPOSE 3001
 
 # Start the application
 CMD ["npm", "run", "start:prod"]
