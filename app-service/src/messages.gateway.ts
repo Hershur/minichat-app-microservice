@@ -30,10 +30,14 @@ export class MessagesGateway
   handleConnection(client: Socket) {
     const token = client.handshake.headers.authorization?.split(' ')?.[1];
     const userId = this.messageService.getUserDetailsFromAuthToken(token, 'id');
+    const userName = this.messageService.getUserDetailsFromAuthToken(
+      token,
+      'name',
+    );
     this.users.set(userId, client.id);
 
     this.logger.log(`${client.id} - connected`);
-    this.server.emit('all', `${client.id} has joined`);
+    this.server.emit('all', `${userName} has joined`);
   }
 
   handleDisconnect(client: Socket) {
