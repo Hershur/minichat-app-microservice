@@ -17,6 +17,7 @@ import { JwtModule } from '@nestjs/jwt';
         name: 'USER:SERVICE',
         transport: Transport.TCP,
         options: {
+          host: 'userservice',
           port: 3002,
         },
       },
@@ -24,6 +25,7 @@ import { JwtModule } from '@nestjs/jwt';
         name: 'MESSAGE:SERVICE',
         transport: Transport.TCP,
         options: {
+          host: 'messageservice',
           port: 3001,
         },
       },

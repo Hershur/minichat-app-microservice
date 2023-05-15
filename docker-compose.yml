@@ -16,6 +16,8 @@ services:
         condition: service_healthy
       messageservice:
         condition: service_healthy
+    networks:
+      - chat-network
 
   userservice:
     container_name: userservice
@@ -28,6 +30,8 @@ services:
     environment:
       JWT_SECRET: 'DEb2tOddZ83FF+vguMJFgY9L5dttSiuYXXSx4N639wl/kpuxk8uvjw=='
       DATABASE_URL: 'postgres://cqlxdhqq:lu-eS2BPy__JgixNIZbZ3Njnj3lsUtck@rogue.db.elephantsql.com:5432/cqlxdhqq'
+    networks:
+      - chat-network
   
   messageservice:
     container_name: messageservice
@@ -37,3 +41,9 @@ services:
       dockerfile: Dockerfile
     ports:
       - '3001:3001'
+    networks:
+      - chat-network
+
+networks:
+  chat-network:
+    driver: bridge
